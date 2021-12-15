@@ -1,0 +1,21 @@
+<div class="modal fade" id="deleteContentModal" tabindex="-1" role="dialog" aria-labelledby="deleteContentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteContentModalLabel">{{'TECH_CONTENT_DELETE' | translate}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row  justify-content-center align-items-center margin-top">
+          <div>{{'TECH_CONTENT_DELETE_MESSAGE' | translate}}</div>
+        </div>
+        <div class="row justify-content-center align-items-center margin-top">
+          <button type="button" class="btn btn-secondary mr-4" data-dismiss="modal" aria-label="Close" ng-click="clean()">{{'BUTTON_CANCEL' | translate}}</button>
+          <button type="submit" class="btn btn-danger ml-4" ng-click="del()">{{'BUTTON_DELETE' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

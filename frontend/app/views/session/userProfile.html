@@ -1,0 +1,338 @@
+<div class="content-profile row mx-2">
+  <div class="col border-right">
+    <div class="sticky-top-row" ng-if="profile != undefined">
+      <div class="page-title mb-4">
+        <h2>{{'PROFILE_TITLE' | translate}}</h2>
+      </div>
+      <div>
+        <div class="row mx-2 justify-content-center">
+          <div>
+            <div class="row justify-content-end">
+              <div ng-if="profile.username == username">
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#editProfileModal">
+                  <i class="far fa-edit fa-sm"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="row justify-content-center">
+              <div ng-if="profile.image != undefined">
+                <div class="max-logo d-flex align-items-center justify-content-center">
+                  <img ng-src="{{profile.image}}" id="profilePicture" alt={{'IMAGE_PROFILE'|translate}} class="rounded-circle img-slot"/>
+                </div>
+              </div>
+              <div ng-if="profile.image == undefined">
+                <div class="max-logo d-flex align-items-center justify-content-center">
+                  <img src="resources/assets/user_picture_default.jpg" alt={{'IMAGE_PROFILE_RANDOM'|translate}}
+                       class="rounded-circle img-slot"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-content-center">
+              <h2>{{profile.username}}</h2>
+              <div ng-if="profile.admin">
+                <i class="ml-2 mt-2 fas fa-rocket fa-2x rocket-color-admin" data-toggle="tooltip"
+                   title="{{'TECH_TOOLTIP_ADMIN'|translate}}"></i>
+              </div>
+              <div ng-if="profile.verify">
+                <i class="ml-2 mt-2 fas fa-rocket fa-2x rocket-color" data-toggle="tooltip"
+                   title="{{'TECH_TOOLTIP_MODERATOR'|translate}}"></i>
+              </div>
+            </div>
+            <div ng-if="profile.description !== '' " class="ml-2 mt-2">
+              <p><strong>{{'PROFILE_DESCRIPTION' | translate}}</strong> {{profile.description}}</p>
+            </div>
+            <div ng-if="profile.username == username && !profile.admin">
+              <div class="custom-control custom-checkbox mb-2">
+                <input type="checkbox" class="custom-control-input"
+                       ng-model="modValue" ng-click="changeMod()" id="modCheckbox">
+                <label class="custom-control-label"
+                       for="modCheckbox"><strong>{{'BUTTON_MODERATE' | translate}}</strong></label>
+
+              </div>
+            </div>
+            <div ng-if="profile.verify">
+              <p>
+                <strong>{{'PROFILE_MODERATOR' | translate}}</strong>
+              <div class="mb-1" ng-repeat="verifyTech in profile.verifications"><a class="tags" href="{{'#/techs/'+verifyTech.techId}}">{{verifyTech.frameworkName}}</a></div>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row mx-2 justify-content-center my-3" >
+          <div class="col emphasis">
+            <h2><strong>{{profile.contentAmount}}</strong></h2>
+            <p><small>{{'PROFILE_UPLOADED_CONTENTS' | translate}}</small></p>
+          </div>
+          <div class="col emphasis">
+            <h2><strong>{{profile.commentAmount}}</strong></h2>
+            <p><small>{{'PROFILE_COMMENTS' | translate}}</small></p>
+          </div>
+          <div class="col emphasis">
+            <h2><strong>{{profile.votesAmount}} </strong></h2>
+            <p><small>{{'PROFILE_VOTES_GIVEN' | translate}}</small></p>
+          </div>
+
+          <div class="col emphasis">
+            <h2><strong>{{profile.techsAmount}} </strong></h2>
+            <p><small>{{'PROFILE_TECHS' | translate}}</small></p>
+          </div>
+
+          <div class="col emphasis">
+            <h2><strong>{{profile.postsAmount}} </strong></h2>
+            <p><small>{{'PROFILE_POSTS' | translate}}</small></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <!-- Comments -->
+    <div class="page-title mb-4 ml-2 text-left">
+      <h2>{{'PROFILE_COMMENTS' | translate}}</h2>
+    </div>
+    <div ng-if="profile.commentAmount != 0">
+      <div class="container d-flex justify-content-center">
+        <div ng-repeat="comment in profile.comments track by $index" class="profile-card mb-1">
+          <div class="card emphasis emph-comment row mb-2">
+            <div class="card-body row mt-1">
+              <div class="col-3 secondary-font">
+                <a href="{{'#/techs/'+comment.techId}}">
+                  {{comment.techName}}
+                </a>
+              </div>
+              <div class="col-6 text-left"> {{comment.description}}</div>
+              <div class="col third-font text-right"> {{comment.date | date:'dd/MM/yyyy HH:mm'}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Comment pagination -->
+      <div ng-if="commentPaging != undefined">
+        <pagination paging="{{commentPaging}}" id="{{'comments'}}"></pagination>
+      </div>
+    </div>
+    <div ng-if="profile.commentAmount == 0">
+      <div>
+        {{'PROFILE_EMPTY_COMMENTS' | translate}}
+      </div>
+    </div>
+
+    <!-- Contents -->
+    <div class="page-title mb-4 ml-2 text-left">
+      <h2>{{'PROFILE_CONTENTS' | translate}}</h2>
+    </div>
+    <div ng-if="profile.contentAmount != 0">
+      <div class="container d-flex justify-content-center">
+        <div ng-repeat="content in profile.content track by $index" class="profile-card mb-1">
+          <div class="card emphasis emph-content row mb-2">
+            <div class="card-body row mt-1">
+              <div class="col-3 secondary-font">
+                <a href="{{'#/techs/'+content.techId}}">
+                  {{content.techName}}
+                </a>
+              </div>
+
+              <div class="col-6 text-left">
+                {{'PROFILE_CONTENT_' + content.type | uppercase | translate }}
+                {{content.title}}
+              </div>
+
+              <div class="col third-font text-right"> {{content.date | date:'dd/MM/yyyy HH:mm'}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Content pagination -->
+      <div ng-if="contentPaging != undefined">
+        <pagination paging="{{contentPaging}}" id="{{'content'}}"></pagination>
+      </div>
+    </div>
+    <div ng-if="profile.contentAmount == 0">
+      {{'PROFILE_EMPTY_CONTENT' | translate}}
+    </div>
+
+    <!-- Votes -->
+    <div class="page-title mb-4 ml-2 text-left">
+      <h2>{{'PROFILE_VOTES' | translate}}</h2>
+    </div>
+    <div ng-if="profile.votesAmount">
+      <div class="container row equal justify-content-center" style="margin: auto">
+        <div ng-repeat="vote in profile.votes track by $index" class="col-5 votes-card mb-1 mr-1">
+          <div class="card col d-flex emphasis emph-votes mb-2 mx-2">
+            <div class="card-body row mt-1">
+              <div class="col secondary-font">
+                <a href="{{'#/techs/'+vote.techId}}">
+                  {{vote.techName}}
+                </a>
+              </div>
+              <div class="col" ng-if="vote.vote!=undefined">
+                {{'PROFILE_VOTES_OVER_5' | translate: ("{stars:" + vote.vote + "}")}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Votes pagination -->
+    </div>
+    <div ng-if="votesPaging != undefined">
+      <pagination paging="{{votesPaging}}" id="{{'votes'}}"></pagination>
+    </div>
+    <div ng-if="profile.votesAmount == 0">
+      {{'PROFILE_EMPTY_VOTES' | translate}}
+    </div>
+
+    <!-- Frameworks -->
+    <div ng-if="profile.techsAmount != 0">
+      <div class="page-title mb-4 ml-2 text-left">
+        <h2>{{'PROFILE_TECHS' | translate}}</h2>
+      </div>
+      <div class="container row equal justify-content-center" style="margin: auto;">
+        <div ng-repeat="tech in profile.techs track by $index" class="mb-1">
+          <div class="card mx-4 mb-4">
+            <a href="{{'#/techs/'+tech.id}}">
+              <div class="card-body">
+                <div ng-if="tech.hasPicture">
+                  <div class="max-logo d-flex align-items-center justify-content-center">
+                    <img ng-src="{{tech.picture}}" alt="{{'TECH_PICTURE'|translate}}"/>
+                  </div>
+                </div>
+                <div ng-if="!tech.hasPicture">
+                  <div class="max-logo d-flex align-items-center justify-content-center">
+                    <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE'|translate}}"/>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer text-dark">
+                <span>{{tech.name}} | </span>
+                <span class="fa fa-star fa-sm"></span>
+                <span>{{tech.stars}}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Tech pagination -->
+      <div ng-if="techsPaging != undefined">
+        <pagination paging="{{techsPaging}}" id="{{'techs'}}"></pagination>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="page-title mb-4 ml-2 text-left">
+      <h2>{{'PROFILE_POSTS' | translate}}</h2>
+    </div>
+    <div ng-if="profile.postsAmount != 0">
+      <div class="container d-flex justify-content-center">
+        <div ng-repeat="post in profile.posts track by $index" class="profile-card mb-1">
+          <div class="card emphasis emph-post row mb-2">
+            <div class="card-body row mt-1">
+              <div class="col-3 secondary-font">
+                <a href="{{'#/posts/'+post.id}}">
+                  {{post.postTitle}}
+                </a>
+              </div>
+              <div class="col-6 text-left">
+                {{post.postDescription}}
+              </div>
+              <div class="col third-font text-right">
+                {{post.timestamp | date:'dd/MM/yyyy HH:mm'}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content pagination -->
+      </div>
+      <div ng-if="postsPaging != undefined">
+        <pagination paging="{{postsPaging}}" id="{{'posts'}}"></pagination>
+      </div>
+    </div>
+    <div ng-if="profile.postsAmount == 0">
+      {{'PROFILE_EMPTY_POSTS' | translate}}
+    </div>
+  </div>
+</div>
+
+<!--Edit Profile Modal -->
+
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="editProfileLabel"><strong>{{'PROFILE_EDIT_TITLE'|translate}}</strong></h4>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+        <span aria-hidden="true">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="mt-2 text-danger text-center" ng-if="error">
+          <div ng-repeat="errorDetail in errorDetails">
+            {{errorDetail.message}}
+          </div>
+        </div>
+        <!-- Change Picture and Description-->
+        <form  ng-submit="updateProfile()" name="updateForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="image">{{'PROFILE_CHANGE_PICTURE'|translate}}</label>
+            <div class="text-center">
+              <input ng-model="update.image" id="image" class="form-control" type="file" ngf-select="setPic($file)" accept="image/*" name="image"/>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">{{'PROFILE_DESCRIPTION'|translate}}</label>
+            <textarea ng-model="update.description" id="description" name="description" class="form-control"></textarea>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <input class="btn btn-info" ng-disabled="(update.description == undefined || update.description.replaceAll(' ','') == '') && update.picture == undefined" id="editProfileButton" type="submit" value="{{'BUTTON_SUBMIT'|translate}}"/>
+            <div class="btn btn-info disabled" id="editProfileLoading" hidden>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              {{'BUTTON_LOADING'|translate}}
+            </div>
+          </div>
+        </form>
+
+        <!-- Change Password -->
+        <div class="d-flex justify-content-center mt-3">
+          <span><a ng-click="changePass()" ng-href="#/users/{{id}}/change_password">{{'LOGIN_CHANGE_PASSWORD'|translate}}</a></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stop being a mod Modal -->
+
+<div class="modal fade" id="stopBeingAModModal" tabindex="-1" role="dialog" aria-labelledby="stopBeingAModModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="stopBeingAModModalLabel"><strong>{{'PROFILE_ALLOW_MOD' | translate}}</strong></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row padding-left justify-content-center align-items-center">
+          <div><h4>{{'PROFILE_SURE_STOP_MOD' | translate}}</h4> </div>
+          <div>{{'PROFILE_STOP_MOD_DESCRIPTION' | translate}}</div>
+        </div>
+        <div class="row justify-content-center align-items-center margin-top">
+          <button type="button" class="btn btn-secondary mr-4" data-dismiss="modal" aria-label="Close">{{'BUTTON_CANCEL' | translate}}
+          </button>
+          <button class="btn btn-danger ml-4" ng-click="updateMod(false)">{{'BUTTON_STOP_BEING_MOD' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

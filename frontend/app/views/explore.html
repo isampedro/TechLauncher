@@ -1,0 +1,341 @@
+<div class="content-search">
+  <div class="sidebar-search">
+
+    <!-- Filter By Categories -->
+    <div class="subtitle"><h4>{{'EXPLORE_CATEGORIES' | translate}}</h4></div>
+
+
+    <div ng-repeat="category in categories" class="row" style="margin: auto">
+      <div ng-if="$index <= 5 " class="form-check">
+        <input class="form-check-input" type="checkbox" ng-model="category.selected"  value="{{category.category}}">
+        <label class="form-check-label" style="margin-left: 1em">
+          {{ "CATEGORY_" + category.category | uppercase | translate}}
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <button ng-hide="categoriesShowMoreBtnVisible" class="btn btn-link" ng-click="showMore('Categories')">{{'EXPLORE_SHOW_MORE' | translate}}</button>
+    </div>
+    <div ng-show="categoriesVisible" id="hiddenCategories">
+      <div ng-repeat="category in categories" class="row" style="margin: auto">
+        <div ng-if="$index >= 6" class="form-check">
+          <input class="form-check-input" type="checkbox" ng-model="category.selected"  value="{{category.category}}" >
+          <label class="form-check-label" style="margin-left: 1em">
+            {{ "CATEGORY_" + category.category | uppercase | translate}}
+          </label>
+        </div>
+      </div>
+      <div>
+        <button ng-show="categoriesShowLessBtnVisible" class="btn btn-link" ng-click="showLess('Categories')">{{'EXPLORE_SHOW_LESS' | translate}}</button>
+      </div>
+    </div>
+
+    <!-- Filter By Types -->
+    <div class="subtitle sidebar-title"><h4>{{'EXPLORE_TYPES' | translate}}</h4></div>
+
+    <div ng-repeat="type in types" class="row" style="margin: auto">
+      <div ng-if="$index <= 5" class="form-check">
+        <input class="form-check-input" type="checkbox" ng-model="type.selected"  value="{{type.type}}">
+        <label class="form-check-label" style="margin-left: 1em">
+          {{'TYPE_'+type.type | uppercase | translate}}
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <button ng-hide="typesShowMoreBtnVisible" class="btn btn-link" ng-click="showMore('Types')">{{'EXPLORE_SHOW_MORE' | translate}}</button>
+    </div>
+    <div ng-show="typesVisible" id="hiddenTypes">
+
+      <div ng-repeat="type in types" class="row" style="margin: auto">
+        <div ng-if="$index >= 6" class="form-check">
+          <input class="form-check-input" type="checkbox" ng-model="type.selected"  value="{{type.type}}">
+          <label class="form-check-label" style="margin-left: 1em">
+            {{'TYPE_'+type.type | uppercase | translate}}
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <button ng-show="typesShowLessBtnVisible" class="btn btn-link" ng-click="showLess('Types')">{{'EXPLORE_SHOW_LESS' | translate}}</button>
+      </div>
+    </div>
+
+
+    <!--Filter By Comments Update Date-->
+
+    <div class="subtitle sidebar-title"><h4>{{'EXPLORE_UPDATE_DATE' | translate}}</h4></div>
+
+    <span>
+        <select ng-model="lastUpdate" id="update-date-dropdown" ng-click="search()" class="row" style="margin: auto">
+          <option value="0">{{'EXPLORE_ANY_DATE' | translate}}</option>
+          <option value="1">{{'EXPLORE_LAST_DAYS' | translate}}</option>
+          <option value="2">{{'EXPLORE_LAST_WEEK' | translate}}</option>
+          <option value="3">{{'EXPLORE_LAST_MONTH' | translate}}</option>
+          <option value="4">{{'EXPLORE_LAST_MONTHS' | translate}}</option>
+          <option value="5" selected>{{'EXPLORE_LAST_YEAR' | translate}}</option>
+        </select>
+      </span>
+
+    <!--Filter By Comments Date-->
+
+    <div class="subtitle sidebar-title"><h4>{{'EXPLORE_COMMENT_DATE' | translate}}</h4></div>
+
+    <span>
+        <select ng-model="lastComment" id="comments-date-dropdown" ng-click="search()" class="row" style="margin: auto">
+          <option value="0">{{'EXPLORE_ANY_DATE' | translate}}</option>
+          <option value="1">{{'EXPLORE_LAST_DAYS' | translate}}</option>
+          <option value="2">{{'EXPLORE_LAST_WEEK' | translate}}</option>
+          <option value="3">{{'EXPLORE_LAST_MONTH' | translate}}</option>
+          <option value="4">{{'EXPLORE_LAST_MONTHS' | translate}}</option>
+          <option value="5">{{'EXPLORE_LAST_YEAR' | translate}}</option>
+        </select>
+      </span>
+
+
+    <!--Filter By Comments Amount-->
+
+    <div class="subtitle sidebar-title"><h4>{{'EXPLORE_COMMENTS' | translate}}</h4></div>
+
+    <span>
+        <select ng-model="commentAmount" id="comments-dropdown"  ng-click="search()" class="row" style="margin: auto">
+          <option value="0">{{'EXPLORE_COMMENTS_ALL' | translate}}</option>
+          <option value="1">{{'EXPLORE_COMMENTS_FROM' | translate : '{amount:1}' }}</option>
+          <option value="5">{{'EXPLORE_COMMENTS_FROM' | translate : '{amount:5}' }}</option>
+          <option value="10">{{'EXPLORE_COMMENTS_FROM' | translate : '{amount:10}' }}</option>
+          <option value="20">{{'EXPLORE_COMMENTS_FROM' | translate : '{amount:20}' }}</option>
+          <option value="50">{{'EXPLORE_COMMENTS_FROM' | translate : '{amount:50}' }}</option>
+        </select>
+      </span>
+
+
+    <!--Filter By Rating-->
+    <div ng-if="activeTab === 'T'" id="techRating">
+      <div class="subtitle sidebar-title"><h4>{{'EXPLORE_RATING' | translate}}</h4></div>
+
+      <span>{{'EXPLORE_FROM' | translate}}</span>
+      <span>
+          <select ng-model="starsLeft" ng-init="starsLeft = 0" id="stars-dropdown-1" ng-click="search()">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </span>
+      <span>{{'EXPLORE_TO_5_STARS' | translate}}</span>
+      <span>
+          <select ng-model="starsRight" ng-init="starsRight = 5" id="stars-dropdown-2" ng-click="search()">
+            <option ng-if="starsLeft==0" value="0">0</option>
+            <option ng-if="starsLeft<=1" value="1">1</option>
+            <option ng-if="starsLeft<=2" value="2">2</option>
+            <option ng-if="starsLeft<=3" value="3">3</option>
+            <option ng-if="starsLeft<=4" value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </span>
+    </div>
+
+  </div>
+
+
+  <!-- Search Bar -->
+  <div class="search-bar sidebar-title">
+    <form class="form-inline my-2 my-lg-0">
+      <input ng-model="nameToSearch"  class="form-control mr-sm-2" type="text" placeholder="{{'SEARCH_TITLE' | translate}}" aria-label="Search" size="80">
+      <button class="btn my-2 my-sm-0 primary-button" type="button" ng-click="search()">{{'SEARCH_TITLE' | translate}}</button>
+    </form>
+    <div ng-if="activeTab === 'T'" class="form-check" id="searchByNameCheckbox">
+      <input ng-model="nameFlag.selected" class="form-check-input" type="checkbox" value="" id="searchOnlyByName">
+      <label class="form-check-label" for="searchOnlyByName" style="margin-left: 1em">
+        {{'EXPLORE_SEARCH_ONLY_BY_NAME' | translate}}
+      </label>
+    </div>
+
+    <!-- Sort -->
+    <div class="d-flex flex-row justify-content-end col">
+      <div class="mx-2">
+        <label class="subtitle" for="sortSelect">{{'EXPLORE_SORT_BY' | translate}}</label>
+        <select ng-model="groupBy" class="form-control" id="sortSelect" ng-click="search()">
+          <option selected value="0">{{'EXPLORE_SORT_BY_NONE' | translate}}</option>
+          <option ng-if="activeTab === 'T'" value="1">{{'EXPLORE_SORT_BY_RATING' | translate}}</option>
+          <option value="2">{{'EXPLORE_SORT_BY_COMMENTS_AMOUNT' | translate}}</option>
+          <option value="3">{{'EXPLORE_SORT_BY_TECH_UPDATED' | translate}}</option>
+          <option value="4">{{'EXPLORE_SORT_BY_RECENTLY_COMMENTED' | translate}}</option>
+        </select>
+      </div>
+      <div class="mx-2">
+        <label class="subtitle" for="orderSelect">{{'EXPLORE_ORDER_BY' | translate}}</label>
+        <select ng-model="orderValue" class="form-control" id="orderSelect" ng-click="search()">
+          <option value="1">{{'EXPLORE_ORDER_BY_DESCENDANT' | translate}}</option>
+          <option value="-1">{{'EXPLORE_ORDER_BY_ASCENDANT' | translate}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Search Results For / Explore -->
+  <div class="page-description"></div>
+  <div class="page-title">
+
+    <div ng-switch="isExplore">
+      <div ng-switch-when="true">
+        <h2>{{'EXPLORE_TITLE' | translate}}</h2>
+      </div>
+      <div ng-switch-when="false">
+        <h2>{{'EXPLORE_SEARCH_RESULTS' | translate}} <span ng-if="activeTab === 'T'">({{matchingTechs.frameworksAmount}})</span><span ng-if="activeTab === 'P'">({{posts.postsAmount}})</span></h2>
+      </div>
+    </div>
+  </div>
+
+  <!--Search Results Badges -->
+  <div class="row">
+    <div class="col-8">
+      <div class="margin-top">
+
+        <span id="name" class="badge badge-pill secondary-badge">{{nameToSearch}}</span>
+
+        <span  class="badge badge-pill secondary-badge">{{navbarNameToSearch}}</span>
+
+        <span ng-repeat="category in categories" > <span ng-if="category.selected" class="badge badge-pill secondary-badge"> {{ "CATEGORY_" + category.category | uppercase | translate}} </span></span>
+
+        <span ng-repeat="type in types" > <span ng-if="type.selected" class="badge badge-pill secondary-badge"> {{ "TYPE_" + type.type | uppercase | translate}} </span></span>
+
+        <span ng-if="starsLeft !== undefined && starsRight !== undefined " class="badge badge-pill secondary-badge"> {{'EXPLORE_FROM' | translate }} {{starsLeft}} {{'EXPLORE_TO_5_STARS' | translate }} {{starsRight}} {{'EXPLORE_STARS' | translate }}</span>
+        <span ng-if="starsLeft !== undefined && starsRight === undefined " class="badge badge-pill secondary-badge"> {{'EXPLORE_FROM' | translate }} {{starsLeft}} {{'EXPLORE_TO_5_STARS' | translate }} 5 {{'EXPLORE_STARS' | translate }}</span>
+        <span ng-if="starsLeft === undefined && starsRight !== undefined " class="badge badge-pill secondary-badge"> {{'EXPLORE_FROM' | translate }} 0 {{'EXPLORE_TO_5_STARS' | translate }} {{starsRight}} {{'EXPLORE_STARS' | translate }}</span>
+
+        <span ng-if="commentAmount !== undefined" ng-switch="commentAmount" class="badge badge-pill secondary-badge">
+            <span ng-switch-when="0">{{'EXPLORE_COMMENTS_ALL' | translate}} {{'EXPLORE_OF' | translate}} {{'EXPLORE_COMMENTS_AMOUNT' | translate}}s</span>
+            <span ng-switch-when="1"> {{'EXPLORE_COMMENTS_MORE' | translate}} {{commentAmount}} {{'EXPLORE_COMMENTS_AMOUNT' | translate}} </span>
+            <span ng-switch-default>{{'EXPLORE_COMMENTS_MORE' | translate}} {{commentAmount}} {{'EXPLORE_COMMENTS_AMOUNT' | translate}}s</span>
+          </span>
+
+        <span ng-if="lastUpdate !== undefined" ng-switch="lastUpdate" class="badge badge-pill secondary-badge">
+            {{'EXPLORE_UPDATE_DATE_QUERY' | translate}}
+            <span ng-switch-when="0">{{'EXPLORE_ANY_DATE' | translate | lowercase }}</span>
+            <span ng-switch-when="1">{{'EXPLORE_LAST_DAYS' | translate | lowercase}}</span>
+            <span ng-switch-when="2">{{'EXPLORE_LAST_WEEK' | translate | lowercase}}</span>
+            <span ng-switch-when="3">{{'EXPLORE_LAST_MONTH' | translate | lowercase}}</span>
+            <span ng-switch-when="4">{{'EXPLORE_LAST_MONTHS' | translate | lowercase}}</span>
+            <span ng-switch-when="5">{{'EXPLORE_LAST_YEAR' | translate | lowercase}}</span>
+          </span>
+
+        <span ng-if="lastComment !== undefined" ng-switch="lastComment" class="badge badge-pill secondary-badge">
+            {{'EXPLORE_COMMENTS_DATE_QUERY' | translate}}
+            <span ng-switch-when="0">{{'EXPLORE_ANY_DATE' | translate | lowercase}}</span>
+            <span ng-switch-when="1">{{'EXPLORE_LAST_DAYS' | translate | lowercase}}</span>
+            <span ng-switch-when="2">{{'EXPLORE_LAST_WEEK' | translate | lowercase}}</span>
+            <span ng-switch-when="3">{{'EXPLORE_LAST_MONTH' | translate | lowercase}}</span>
+            <span ng-switch-when="4">{{'EXPLORE_LAST_MONTHS' | translate | lowercase}}</span>
+            <span ng-switch-when="5">{{'EXPLORE_LAST_YEAR' | translate | lowercase}}</span>
+          </span>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="page-description"></div>
+
+  <!-- TABS -->
+
+  <ul class="nav nav-tabs" id="searchTabs">
+    <li class="nav-item">
+      <a ng-click="setActiveTab('T')"  class="nav-link" href="#techs" data-toggle="tab" role="tab" aria-controls="techs" aria-selected="true">{{'EXPLORE_TECHS' | translate}}</a>
+    </li>
+    <li class="nav-item">
+      <a ng-click="setActiveTab('P')"  class="nav-link" href="#posts" data-toggle="tab" role="tab" aria-controls="posts" aria-selected="false">{{'EXPLORE_POSTS' | translate}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-4">
+    <div class="tab-pane active" id="techs">
+
+      <div ng-if="matchingTechs.frameworksAmount == 0 ">{{'EXPLORE_NOT_FOUND' | translate}}</div>
+
+      <div class="row equal">
+        <div ng-repeat="tech in matchingTechs.frameworks" class="card mx-4 mb-4">
+          <a ng-href="#/techs/{{tech.id}}">
+            <div class="card-body">
+              <div ng-if="tech.hasPicture">
+                <div class="max-logo d-flex align-items-center justify-content-center">
+                  <img ng-src="{{tech.picture}}" alt="{{'TECH_PICTURE' | translate }}"/>
+                </div>
+              </div>
+              <div ng-if="!tech.hasPicture">
+                <div class="max-logo d-flex align-items-center justify-content-center">
+                  <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE' | translate }}"/>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-dark">
+              <span>{{tech.name}} | </span><span class="fa fa-star fa-sm"></span><span>{{tech.stars}}</span>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Techs Pagination -->
+
+      <div ng-if="techsPaging != undefined" class="d-flex justify-content-center align-items-center">
+        <pagination paging="{{techsPaging}}" id="{{'tech'}}"></pagination>
+      </div>
+
+    </div>
+    <!-- POSTS TAB -->
+    <div class="tab-pane" id="posts">
+
+
+      <div ng-if="posts.postsAmount != 0">
+
+        <div ng-repeat="post in posts.posts" class="card mb-3 post-card">
+          <div class="card-body">
+            <div class="row search-post-title ml-1">
+              <a href="#/posts/{{post.id}}">
+                {{post.postTitle}}
+              </a>
+            </div>
+            <div class="row search-post-description ml-1">{{post.postDescription}}</div>
+            <div class="row extra-info">
+              <div class="col-9">
+                <button ng-repeat="tag in post.postTags" class="badge badge-color ml-1">
+                            <span ng-switch="tag.type">
+                              <span ng-switch-when="tech_category">
+                                  {{'CATEGORY_' + tag.tagName | uppercase | translate}}
+                              </span>
+                              <span ng-switch-when="tech_type">
+                                  {{'TYPE_' + tag.tagName | uppercase | translate}}
+                              </span>
+                              <span ng-switch-default>
+                                  {{tag.tagName}}
+                              </span>
+                            </span>
+                </button>
+
+              </div>
+              <div class="col">
+                <div class="row d-flex secondary-color text-right post-date small-font">
+                  {{post.timestamp.toLocaleString() | date:'dd/MM/yyyy HH:mm'}}
+                </div>
+                <div class="row d-flex secondary-color text-right small-font">
+                  <a ng-href="/users/{{post.user.username}}">{{post.user.username}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="posts.postsAmount == 0">{{'EXPLORE_NOT_FOUND' | translate}}</div>
+
+      <!-- Posts Pagination -->
+
+      <div ng-if="postsPaging != undefined" class="d-flex justify-content-center align-items-center">
+        <pagination paging="{{postsPaging}}" id="{{'post'}}"></pagination>
+      </div>
+    </div>
+  </div>
+</div>

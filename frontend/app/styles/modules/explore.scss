@@ -1,0 +1,107 @@
+.option {
+  margin-bottom: 2em;
+  margin-top: 2em;
+  width: 80%;
+}
+
+.sidebar-search {
+  position: fixed;
+  height: 100%;
+  width: 20em;
+  z-index: 1;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+  margin-left: 1em;
+  padding-bottom: 10em;
+}
+
+.content-search {
+  position: relative;
+  margin-left: 22em;
+  padding-left: 10px;
+  padding-top: 10px;
+  width: calc(100% - 23em);
+}
+
+.sidebar-search select {
+  padding: 0.5em 0.5em 0.5em 1em;
+  text-decoration: none;
+  font-size: 1em;
+}
+
+.sidebar-search select:hover {
+}
+
+.hide{
+  display: none;
+}
+
+.my-form-inline {
+  width: 4em;
+  display: inline;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.my-badge-inline{
+
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}
+
+.subtitle {
+  color: #733bce;
+}
+
+.sidebar-title{
+  font-size: 1em;
+}
+
+
+.secondary-badge{
+  color: white;
+  background-color: #b4b6b7;
+}
+
+.margin-top {
+  margin-top: 1em;
+}
+
+.btn-width{
+  width: 80%;
+}
+
+.search-post-title{
+  font-size: 1.1em;
+}
+
+.search-post-description{
+  display: block;
+  display: -webkit-box;
+  height: 2.3em;
+  font-size: 0.9em;
+  line-height: 1.2;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.small-font{
+  font-size: 0.9em;
+}

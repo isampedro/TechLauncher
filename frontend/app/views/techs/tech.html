@@ -1,0 +1,596 @@
+<div class="d-flex">
+  <div class="sidenav overflow-auto">
+    <div ng-repeat="category in categories track by $index">
+      <a href={{"#/techs/category/"+category.category}}>{{ "CATEGORY_" + category.category | uppercase | translate}}</a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="container d-flex">
+      <div class="row">
+        <div class="col-2">
+
+          <div ng-if="tech.hasPicture">
+            <div class="max-logo d-flex align-items-center justify-content-center">
+              <img ng-src="{{tech.picture}}" alt="{{'TECH_PICTURE' | translate }}"/>
+            </div>
+          </div>
+          <div ng-if="!tech.hasPicture">
+            <div class="max-logo d-flex align-items-center justify-content-center">
+              <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE' | translate }}"/>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-10">
+          <div class="row">
+            <div class="col">
+              <span class="framework-title"><h2>{{tech.name}}</h2></span>
+              <div>{{'TECH_AUTHOR' | translate }}&nbsp;<a href="#/users/{{tech.authorId}}">{{tech.author}}</a><i
+                class="ml-2 mt-2 fas fa-rocket fa-sm rocket-color-owner" data-toggle="tooltip"
+                title="{{'TOOLTIP_OWNER' | translate }}"></i></div>
+              <div>{{'TECH_DATE' | translate }} {{tech.date}}</div>
+              <button class="btn btn-info mx-auto" ng-click="redirectToExplore(tech.name)">{{'TECH_SEE_POSTS_RELATED' | translate }}</button>
+
+              <span class="badge badge-pill secondary-badge" data-toggle="tooltip"
+                    title="{{'TECH_ADD_TECH_CATEGORY' | translate }}">{{ "CATEGORY_" + tech.category | uppercase | translate}}</span>
+              <span class="badge badge-pill secondary-badge" data-toggle="tooltip"
+                    title="{{'TECH_ADD_TECH_TYPE' | translate }}">{{ "TYPE_" + tech.type | uppercase | translate}}</span>
+            </div>
+            <div class="col d-flex align-items-center justify-content-center">
+              <span class="fa fa-star color-star"></span>
+              <span> {{tech.stars}} | {{tech.votesCant}} </span>
+              <span class="fa fa-user"></span>
+            </div>
+            <div class="d-flex flex-column my-auto">
+              <div ng-if="isAdmin || isOwner">
+                <div class="mb-4">
+                  <a href="#/techs/{{tech.id}}/edit_tech">
+                    <button class="btn btn-info btn-block text-nowrap" type="button">
+                      <i class="fa fa-edit fa-sm mr-1"></i>
+                      {{'BUTTON_EDIT_TECH' | translate }}
+                    </button>
+                  </a>
+                </div>
+                <div>
+                  <button class="btn btn-danger btn-block text-nowrap" type="button" ng-click="setDel(tech.location)"
+                          data-toggle="modal" data-target="#deleteTechModal">
+                    <i class="fas fa-trash-alt fa-sm mr-1"></i>
+                    {{'BUTTON_DELETE_TECH' | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="description">
+            {{tech.description}}
+          </div>
+        </div>
+        <div class="margin-top margin-left justify">{{tech.introduction}}</div>
+      </div>
+    </div>
+
+
+    <!-- Content -->
+    <div class="container">
+      <div><h4 class="title">{{'TECH_CONTENT' | translate }}</h4></div>
+      <div class="d-flex justify-content-end">
+
+        <div ng-if="!isPresent">
+          <button class="btn btn-info" type="button" data-toggle="modal" data-target="#loginModal">
+            {{'BUTTON_ADD_CONTENT' | translate }}
+          </button>
+        </div>
+        <div ng-if="isPresent">
+          <div ng-if="!isEnable">
+            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#confirmMailModal">
+              {{'BUTTON_ADD_CONTENT' | translate }}
+            </button>
+          </div>
+          <div ng-if="isEnable">
+            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#addContentModal">
+              {{'BUTTON_ADD_CONTENT' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-if="tech.books.length <= 0 && tech.courses.length  <= 0 && tech.tutorials.length <= 0">
+      <div class="d-flex align-items-center justify-content-center">
+        {{'TECH_CONTENT_NOT_AVAILABLE' | translate }}
+      </div>
+    </div>
+
+    <!-- Bibliography -->
+    <div ng-if="tech.books.length > 0">
+      <div class="container no-overflow-x">
+        <h4 class="subtitle margin-left">{{'TECH_CONTENT_BIBLIOGRAPHY' | translate }}</h4>
+        <ul class="margin-bottom list-group margin-left list-group-flush description">
+          <li ng-repeat="book in tech.books  track by $index" class="list-group-item">
+            <div class="row">
+              <div class="col-10">
+                <a target="_blank" href="{{book.link}}">{{book.title}}</a>
+              </div>
+              <div class="col-2 d-flex justify-content-end">
+                <div ng-if="isAdmin || isVerify || username == book.user.username || isOwner">
+                  <button class="btn btn-link" ng-click="setDel(book.location)" data-toggle="modal"
+                          data-target="#deleteContentModal"><i class="fa fa-trash"></i></button>
+                </div>
+                <div ng-if="isPresent && isEnable && book.user.username!=username && !isReporter(book, username) && !isVerify && !isAdmin && !isOwner">
+                  <button class="btn btn-link" ng-click="setReport(book.reportLocation)" data-toggle="modal"
+                          data-target="#reportContentModal"><i class="fa fa-exclamation"></i></button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div ng-if="booksPaging != undefined">
+          <pagination paging="{{booksPaging}}" id="{{'books'}}"></pagination>
+        </div>
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div ng-if="tech.courses.length > 0">
+      <div class="container no-overflow-x">
+        <h4 class="subtitle margin-left ">{{'TECH_CONTENT_COURSES' | translate }}</h4>
+
+        <ul class=" margin-bottom list-group margin-left list-group-flush description">
+
+          <li ng-repeat="course in tech.courses  track by $index" class="list-group-item">
+            <div class="row">
+              <div class="col-10">
+                <a target="_blank" href="{{course.link}}">{{course.title}}</a>
+              </div>
+              <div class="col-2 d-flex justify-content-end">
+
+                <div ng-if="isAdmin || isVerify|| username == course.user.username || isOwner">
+                  <button class="btn btn-link" ng-click="setDel(course.location)" data-toggle="modal"
+                          data-target="#deleteContentModal"><i class="fa fa-trash"></i></button>
+                </div>
+                <div ng-if="isPresent && course.user.username!=username && !isReporter(course, username) && isEnable && !isAdmin && !isOwner && !isVerify">
+                  <button class="btn btn-link" ng-click="setReport(course.reportLocation)" data-toggle="modal"
+                          data-target="#reportContentModal"><i class="fa fa-exclamation"></i></button>
+                </div>
+              </div>
+
+
+            </div>
+          </li>
+        </ul>
+        <!-- Courses pagination -->
+        <div ng-if="coursesPaging != undefined">
+          <pagination paging="{{coursesPaging}}" id="{{'courses'}}"></pagination>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorials -->
+    <div ng-if="tech.tutorials.length > 0">
+      <div class="container no-overflow-x">
+        <h4 class="subtitle margin-left">{{'TECH_CONTENT_TUTORIALS' | translate }}</h4>
+        <ul class="  margin-bottom list-group margin-left list-group-flush description">
+          <li ng-repeat="tutorial in tech.tutorials  track by $index" class="list-group-item">
+            <div class="row">
+              <div class="col-10">
+                <a target="_blank" href="{{tutorial.link}}">{{tutorial.title}}</a>
+              </div>
+              <div class="col-2 d-flex justify-content-end">
+                <div ng-if="isAdmin || isVerify || username == tutorial.user.username || isOwner">
+                  <button class="btn btn-link" ng-click="setDel(tutorial.location)" data-toggle="modal"
+                          data-target="#deleteContentModal"><i class="fa fa-trash"></i></button>
+                </div>
+                <div ng-if="isPresent && tutorial.user.username!=username && !isReporter(tutorial, username) && isEnable && !isVerify && !isAdmin && !isOwner">
+                  <button class="btn btn-link" ng-click="setReport(tutorial.reportLocation)" data-toggle="modal"
+                          data-target="#reportContentModal"><i class="fa fa-exclamation"></i></button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <!-- Tutorial pagination -->
+        <div ng-if="tutorialsPaging != undefined">
+          <pagination paging="{{tutorialsPaging}}" id="{{'tutorials'}}"></pagination>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Comments -->
+    <div ng-if="tech.comments.length > 0">
+      <div class="container">
+        <h4 class="title">{{'TECH_COMMENTS' | translate }}</h4>
+      </div>
+
+      <div class="container d-flex">
+        <div ng-repeat="comment in tech.comments  track by $index" class="row margin-left margin-bottom">
+          <div class="col-1">
+            <div>
+              <div ng-if="isPresent">
+                <div ng-if="!isEnable">
+                  <button class=" btn upVote btn-link" data-toggle="modal" data-target="#confirmMailModal">
+                    <i class="fa fa-arrow-up arrow">{{comment.votesUp}}</i>
+                  </button>
+                </div>
+                <div ng-if="isEnable">
+
+                  <button class="btn upVote btn-link" type="submit" ng-click="upVote(comment.location)">
+                    <i ng-if="hasUserVotedUp(comment, username)"
+                       class="fa fa-arrow-up arrow votedUp">{{comment.votesUp}}</i>
+                    <i ng-if="!hasUserVotedUp(comment, username)" class="fa fa-arrow-up arrow">{{comment.votesUp}}</i>
+                  </button>
+                </div>
+              </div>
+              <div ng-if="!isPresent">
+                <button class=" btn upVote btn-link" data-toggle="modal" data-target="#loginModal">
+                  <i class="fa fa-arrow-up arrow">{{comment.votesUp}}</i>
+                </button>
+              </div>
+            </div>
+            <div>
+
+              <div ng-if="isPresent">
+                <div ng-if="!isEnable">
+                  <button class=" btn upVote btn-link" data-toggle="modal" data-target="#confirmMailModal">
+                    <i class="fa fa-arrow-down arrow">{{comment.votesDown}}</i>
+                  </button>
+                </div>
+                <div ng-if="isEnable">
+
+                  <button class="btn upVote btn-link" type="submit" ng-click="downVote(comment.location)">
+                    <i ng-if="hasUserVotedDown(comment, username)"
+                       class="fa fa-arrow-down arrow votedDown">{{comment.votesDown}}</i>
+                    <i ng-if="!hasUserVotedDown(comment, username)"
+                       class="fa fa-arrow-down arrow">{{comment.votesDown}}</i>
+                  </button>
+                </div>
+              </div>
+              <div ng-if="!isPresent">
+                <button class=" btn upVote btn-link" data-toggle="modal" data-target="#loginModal">
+                  <i class="fa fa-arrow-down arrow">{{comment.votesDown}}</i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-11">
+            <div class="row">
+              <div class="col">
+                <a href="#/{{comment.user.location}}">
+                  <div class="col d-inline-flex">
+                    <div class="secondary-font mr-2">
+                      {{comment.user.username}}
+                    </div>
+                    <div ng-if="comment.user.username == tech.author">
+                      <i class="ml-2 mt-2 fas fa-rocket fa-sm rocket-color-owner" data-toggle="tooltip"
+                         title="{{'TECH_TOOLTIP_OWNER' | translate }}"></i>
+                    </div>
+                    <div ng-if="comment.user.username != tech.author && comment.user.admin">
+                      <i class="ml-2 mt-2 fas fa-rocket fa-sm rocket-color-admin" data-toggle="tooltip"
+                         title="{{'TECH_TOOLTIP_ADMIN' | translate }}"></i>
+                    </div>
+                    <div ng-if="comment.user.username != tech.author && !comment.user.admin && isVerify">
+                      <i class="ml-2 mt-2 fas fa-rocket fa-sm rocket-color" data-toggle="tooltip"
+                         title="{{'TECH_TOOLTIP_MODERATOR' | translate }}"></i>
+                    </div>
+
+                  </div>
+                </a>
+              </div>
+              <div class="col third-font d-flex justify-content-flex-end">
+                {{comment.date}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col d-flex">
+                {{comment.description}}
+              </div>
+              <div class="col-2 d-flex justify-content-end">
+                <div ng-if="isPresent && username != comment.user.username && !isReporter(comment, username) && !isAdmin && !isOwner && isEnable">
+                  <button class="btn btn-link" ng-click="setReport(comment.reportLocation)" data-toggle="modal"
+                          data-target="#reportCommentModal"><i class="fa fa-exclamation"></i></button>
+                </div>
+                <div ng-if="isAdmin || isOwner || comment.user.username == username">
+                  <button class="btn btn-link" ng-click="setDel(comment.location)" data-toggle="modal"
+                          data-target="#deleteCommentModal"><i class="fa fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="row padding-bottom">
+
+              <div ng-if="isPresent">
+                <div ng-if="!isEnable">
+                  <button type="button" class="btn btn-light" data-toggle="modal" data-target="#confirmMailModal">
+                    <i class="arrow fas fa-comment-alt fa-xs"></i><span
+                    class="reply padding-left">{{'BUTTON_COMMENT_REPLY' | translate }}</span>
+                  </button>
+                </div>
+                <div ng-if="isEnable">
+                  <button type="button" class="btn btn-light" data-toggle="collapse" data-target="#Reply--{{$index}}"
+                          aria-expanded="false" aria-controls="multiCollapseExample2">
+                    <i class="arrow fas fa-comment-alt fa-xs"></i><span
+                    class="reply padding-left">{{'BUTTON_COMMENT_REPLY' | translate }}</span>
+                  </button>
+                </div>
+              </div>
+              <div ng-if="!isPresent">
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#loginModal">
+                  <i class="arrow fas fa-comment-alt fa-xs"></i><span
+                  class="reply padding-left">{{'BUTTON_COMMENT_REPLY' | translate }}</span>
+                </button>
+              </div>
+
+              <span class="padding-left">
+              <button type="button" class="btn btn-light" data-toggle="collapse"
+                      data-target="#See--{{$parent.index}}-{{$index}}" aria-expanded="false"
+                      aria-controls="multiCollapseExample1">
+                <i class="arrow fas fa-eye fa-xs"></i><span
+                class="reply padding-left">{{'BUTTON_COMMENT_SEE_REPLIES' | translate }}</span>
+              </button>
+            </span>
+
+            </div>
+
+            <div class="collapse multi-collapse" id="See--{{$parent.index}}-{{$index}}">
+              <div ng-if="comment.replies.length <= 0">
+                <div>{{'TECH_COMMENT_NO_REPLIES' | translate }}</div>
+              </div>
+              <div ng-if="comment.replies.length > 0">
+                <div ng-repeat="reply in comment.replies track by $parent.$index--$index" class="row margin-left">
+                  <div class="vertical-divider margin-left">
+                    <div class="row d-flex align-items-center ">
+                      <div class="padding-left">
+                          <span class="secondary-font medium-font ">
+                            {{reply.user.username}}
+                          </span>
+                        <span class="third-font">
+                            {{reply.date}}
+                          </span>
+                      </div>
+                    </div>
+                    <div class="row ml-1 medium-font">
+                      <div class="padding-left">
+                        {{reply.description}}
+                      </div>
+                      <div ng-if="isAdmin || isOwner || reply.user.username == username">
+                        <span class="col d-flex justify-content-end align-items-end">
+                          <button class="btn btn-link" ng-click="setDel(reply.location)" data-toggle="modal"
+                                  data-target="#deleteCommentModal"><i class="fa fa-trash"></i></button>
+                        </span>
+                      </div>
+                      <div
+                        ng-if="isPresent && username != reply.user.username && !isReporter(reply, username) && !isAdmin && !isOwner && isEnable">
+                        <div class="col d-flex justify-content-end align-items-end">
+                          <button class="btn btn-link" ng-click="setReport(reply.reportLocation)" data-toggle="modal"
+                                  data-target="#reportCommentModal"><i class="fa fa-exclamation"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row padding-bottom"></div>
+              </div>
+            </div>
+
+            <div class="row collapse multi-collapse" id="Reply--{{$index}}">
+              <form name="replyForm">
+                <div class="form-group">
+                  <label for="replyComment--{{$index}}"> {{'TECH_REPLY_COMMENT' | translate}}</label>
+                  <input class="form-control" type="text" id="replyComment--{{$index}}" ng-model="commentInput"
+                         name="commentInput" required ng-minlength="3" ng-maxlength="500"
+                         placeholder="{{'TECH_REPLY_PLACEHOLDER' | translate}}"/>
+                  <div ng-show="registerForm.commentInput.$dirty && registerForm.commentInput.$error.required">
+                    {{ 'FORM_ERROR_EMPTY' | translate}}
+                  </div>
+                  <div
+                    ng-show="registerForm.commentInput.$error.minlength || registerForm.commentInput.$error.maxlength">
+                    {{ 'FORM_ERROR_LENGTH' | translate: '{min: 3, max: 100}'}}
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center">
+
+                  <div ng-if="isPresent">
+                    <div ng-if="!isEnable">
+                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#confirmMailModal">
+                        {{'BUTTON_SUBMIT' | translate }}
+                      </button>
+                    </div>
+                    <div ng-if="isEnable">
+                      <button ng-if="replyForm.$valid" class="btn primary-button" type="submit"
+                              ng-click="replyComment(comment.location ,commentInput, $index)">{{'BUTTON_SUBMIT' | translate}}
+                      </button>
+                      <button ng-if="replyForm.$invalid" disabled class="btn primary-button" type="submit">
+                        {{'BUTTON_SUBMIT' | translate}}
+                      </button>
+                    </div>
+                  </div>
+                  <div ng-if="!isPresent">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#loginModal">
+                      {{'BUTTON_SUBMIT' | translate }}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Comment pagination -->
+      <div ng-if="commentsPaging != undefined">
+        <pagination paging="{{commentsPaging}}" id="{{'comments'}}"></pagination>
+      </div>
+    </div>
+
+    <!-- User Interaction -->
+    <div class="container">
+      <h4 class="title">{{'TECH_INTERACTIONS' | translate}}</h4>
+    </div>
+
+
+    <div class="container">
+      <div class="row mx-2">
+        <div class="col-6">
+          <div>
+            <form name="commentForm">
+              <div class="form-group">
+                <label for="singleComment">{{'TECH_INTERACTIONS_LEAVE_COMMENT' | translate}}</label>
+                <input class="form-control" type="text" id="singleComment" ng-model="commentInput" name="commentInput"
+                       required ng-minlength="3" ng-maxlength="500"
+                       placeholder="{{'TECH_COMMENT_PLACEHOLDER' | translate}}"/>
+                <div ng-show="registerForm.commentInput.$dirty && registerForm.commentInput.$error.required">
+                  {{ 'FORM_ERROR_EMPTY' | translate}}
+                </div>
+                <div
+                  ng-show="registerForm.commentInput.$error.minlength || registerForm.commentInput.$error.maxlength">
+                  {{ 'FORM_ERROR_LENGTH' | translate: '{min: 3, max: 500}'}}
+                </div>
+              </div>
+
+              <div ng-if="isPresent">
+                <div ng-if="!isEnable">
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#confirmMailModal">
+                    {{'BUTTON_SUBMIT' | translate }}
+                  </button>
+                </div>
+                <div ng-if="isEnable">
+                  <button ng-if="commentForm.$valid" class="btn primary-button" type="submit"
+                          ng-click="addComment(commentInput)">{{'BUTTON_SUBMIT' | translate}}
+                  </button>
+                  <button ng-if="commentForm.$invalid" disabled class="btn primary-button" type="submit">
+                    {{'BUTTON_SUBMIT' | translate}}
+                  </button>
+                </div>
+              </div>
+              <div ng-if="!isPresent">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#loginModal">
+                  {{'BUTTON_SUBMIT' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col">
+          <h5>{{'TECH_INTERACTIONS_RATING' | translate}}</h5>
+
+          <div class="stars">
+
+            <form name="ratingForm">
+
+              <input type="radio" ng-model="star" value="5" class="star star-5" id="star-5" name="star"/>
+              <label class="star star-5" for="star-5"></label>
+
+              <input type="radio" ng-model="star" value="4" class="star star-4" id="star-4" name="star"/>
+              <label class="star star-4" for="star-4"></label>
+
+              <input type="radio" ng-model="star" value="3" class="star star-3" id="star-3" name="star"/>
+              <label class="star star-3" for="star-3"></label>
+
+              <input type="radio" ng-model="star" value="2" class="star star-2" id="star-2" name="star"/>
+              <label class="star star-2" for="star-2"></label>
+
+              <input type="radio" ng-model="star" value="1" class="star star-1" id="star-1" name="star"/>
+              <label class="star star-1" for="star-1"></label>
+
+
+              <div ng-if="isPresent">
+                <div ng-if="!isEnable">
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#confirmMailModal">
+                    {{'BUTTON_RATE' | translate }}
+                  </button>
+                </div>
+                <div ng-if="isEnable">
+                  <button type="submit" class="btn btn-info" ng-click="rateTech(star)">{{'BUTTON_RATE' | translate
+                    }}
+                  </button>
+                </div>
+              </div>
+              <div ng-if="!isPresent">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#loginModal">
+                  {{'BUTTON_RATE' | translate }}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div
+        ng-if="!isAdmin && isPresent && allowMod && !isOwner && isEnable && !isVerify && !verifyPending">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="card text-center">
+            <div class="card-header subtitle"><h5>{{'TECH_APPLY_TITLE' | translate}}</h5></div>
+            <div class="card-body">
+              <p class="card-text">{{'TECH_APPLY_MESSAGE' | translate}}</p>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-info" ng-click="applyForMod(tech.modLocation)">{{'BUTTON_APPLY' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="isVerify && isPresent &&isEnable && !isOwner && !isAdmin && allowMod">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="card text-center">
+            <div class="card-header subtitle"><h5>{{'TECH_STOP_TITLE' | translate}}</h5></div>
+            <div class="card-body">
+              <p class="card-text">{{'TECH_STOP_MESSAGE' | translate}}</p>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-danger" ng-click="stopBeingAMod(tech.modLocation)">
+                {{'BUTTON_STOP' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Competition Cards -->
+    <div ng-if="tech.competitors.length > 0">
+      <div class="container">
+        <h4 class="title">{{'TECH_COMPETITION' | translate}}</h4>
+      </div>
+
+      <div class="container d-flex">
+        <div ng-repeat="competitor in tech.competitors track by $index" class="card mini-card mx-3 mb-4">
+          <a href="#/techs/{{competitor.id}}">
+            <div class="card-body d-flex align-items-center justify-content-center">
+              <div ng-if="competitor.hasPicture">
+                <div class="mini-logo d-flex align-items-center justify-content-center">
+                  <img ng-src="{{competitor.picture}}" alt="{{'TECH_PICTURE' | translate }}"/>
+                </div>
+              </div>
+              <div ng-if="!competitor.hasPicture">
+                <div class="mini-logo d-flex align-items-center justify-content-center">
+                  <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE' | translate }}"/>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-dark">{{competitor.name}}</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <delete-tech-modal del="deleteTech" clean="cleanDel"></delete-tech-modal>
+  <delete-comment-modal del="deleteComment" clean="cleanDel"></delete-comment-modal>
+  <delete-content-modal del="deleteContent" clean="cleanDel"></delete-content-modal>
+  <report-content-modal report="reportContent" clean="cleanReport"></report-content-modal>
+  <report-comment-modal report="reportComment" clean="cleanReport"></report-comment-modal>
+  <add-content-modal add="addContent" error="error" error-details="errorDetails"></add-content-modal>
+  <modal-login></modal-login>
+  <mail-modal></mail-modal>
+</div>
+
+
+<!--  &lt;!&ndash; Content Modal &ndash;&gt;-->
+
+<!--  <div id="snackbar"><spring:message code="tech.content.uploaded_content"/></div>-->
+
+<!--  <div id="snackbarModApplication"><spring:message code="tech.content.pending_approval"/></div>-->

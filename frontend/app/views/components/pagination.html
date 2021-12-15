@@ -1,0 +1,8 @@
+<div class="pagination">
+  <div ng-if="prev!=undefined || next != undefined">
+    <button ng-if="next != undefined" class="btn btn-paging" ng-click="getNext()">{{'BUTTON_NEXT' | translate}}</button>
+    <button ng-if="next == undefined" class="btn btn-paging" disabled>{{'BUTTON_NEXT' | translate}}</button>
+    <button ng-if="prev != undefined" class="btn btn-paging mr-1" ng-click="getPrev()">{{'BUTTON_PREVIOUS' | translate}}</button>
+    <button ng-if="prev == undefined" class="btn btn-paging mr-1" disabled>{{'BUTTON_PREVIOUS' | translate}}</button>
+  </div>
+</div>

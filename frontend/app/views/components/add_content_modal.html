@@ -1,0 +1,56 @@
+<div class="modal fade" id="addContentModal" tabindex="-1" role="dialog" aria-labelledby="addContentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title" id="addContentLabel">{{'ADD_CONTENT' | translate}}</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+        <span aria-hidden="true">&times;</span>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mt-2 text-danger text-center" ng-if="error">
+          <div ng-repeat="errorDetail in errorDetails">
+            {{errorDetail.message}}
+          </div>
+        </div>
+
+        <form name="addContentForm">
+
+          <div ng-if="contentTypeAlreadyExists">{{'REGISTER_UAE' | translate}}</div>
+
+          <div class="form-group">
+            <label for="addContentTitle">{{'ADD_CONTENT_TITLE' | translate}}</label>
+            <input class="form-control" type="text" id="addContentTitle" ng-model="titleInput" name="titleInput" required ng-minlength="4" ng-maxlength="40" placeholder="{{'ADD_CONTENT_TITLE_PLACEHOLDER' | translate}}"/>
+            <div ng-show="addContentForm.titleInput.$dirty && addContentForm.titleInput.$error.required">{{ 'FORM_ERROR_EMPTY' | translate}}</div>
+            <div ng-show="addContentForm.titleInput.$error.minlength || addContentForm.titleInput.$error.maxlength">{{ 'FORM_ERROR_LENGTH' | translate : '{min: 4, max: 40}'}}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="addContentType">{{'ADD_CONTENT_TYPE' | translate}}</label>
+            <select id="addContentType" class="form-control" ng-model="typeInput" name="typeInput" required>
+              <option value="book">{{'CONTENT_BOOK' | translate}}</option>
+              <option value="course">{{'CONTENT_COURSE' | translate}}</option>
+              <option value="tutorial">{{'CONTENT_TUTORIAL' | translate}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="addContentLink">{{'ADD_CONTENT_LINK' | translate}}</label>
+            <input class="form-control" type="text" id="addContentLink" ng-model="linkInput" name="linkInput"  required ng-minlength="3" ng-maxlength="2048" placeholder="{{'ADD_CONTENT_LINK_PLACEHOLDER' | translate}}"/>
+            <div ng-show="addContentForm.titleInput.$dirty && addContentForm.titleInput.$error.required">{{ 'FORM_ERROR_EMPTY' | translate}}</div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+
+            <button ng-if="addContentForm.$valid" class="btn primary-button" type="submit"  ng-click="add(titleInput, typeInput, linkInput)">{{'BUTTON_SUBMIT' | translate}}</button>
+            <button ng-if="addContentForm.$invalid"  disabled class="btn primary-button" type="submit" >{{'BUTTON_SUBMIT' | translate}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

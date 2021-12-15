@@ -1,0 +1,178 @@
+<div class="content-no-sidebar-left">
+  <div class="title"><h1>{{'FORUM_TITLE' | translate}}</h1></div>
+  <div class="post-cards">
+    <div class="d-flex flex-row-reverse">
+      <div ng-if=" !isPresent" ng-cloak>
+        <button class="btn btn-info mt-2 mb-4" data-toggle="modal" data-target="#loginModal">
+          {{'FORUM_ADD_POST' | translate}}
+        </button>
+      </div>
+      <div ng-if="isPresent">
+        <div ng-if="!isEnable">
+          <button class="btn btn-info mt-2 mb-4" data-toggle="modal" data-target="#confirmMailModal">
+            {{'FORUM_ADD_POST' | translate}}
+          </button>
+        </div>
+        <div ng-if="isEnable">
+          <a href="#/posts/add">
+            <button class="btn btn-info mt-2 mb-4" href='#/addPost'>
+              {{'FORUM_ADD_POST' | translate}}
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row showing-results">
+      <div class="col-9"></div>
+      <div class="col showing-results data">
+        {{posts.pageSize * (posts.currentPage - 1) + 1}}- <a
+        ng-if="posts.posts.length < posts.pageSize">{{posts.pageSize * (posts.currentPage - 1) + posts.posts.length}}</a>
+        <a ng-if="posts.posts.length >= posts.pageSize">{{posts.pageSize * (posts.currentPage)}}</a>
+        {{'FORUM_SHOWING_RESULTS' | translate}} {{posts.amount}}
+      </div>
+    </div>
+    <div ng-if="posts.posts.length > 0" style="width: 100%">
+      <div ng-repeat="post in posts.posts">
+        <div class="card mb-3 post-card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-1 net-votes">
+                <div ng-if="!isPresent">
+                  <div class="net-votes">
+                    <button class="btn pt-0 pb-0">
+                      <div>
+                        <i class="fa fa-2x fa-arrow-up" data-toggle="modal"
+                           data-target="#loginModal"></i>
+                      </div>
+                    </button>
+                    <div>
+                      <h4>{{post.votesUp - post.votesDown}}</h4>
+                    </div>
+                  </div>
+                  <div class="net-votes">
+                    <button class="btn pt-0 pb-0">
+                      <div>
+                        <i class="fa fa-2x fa-arrow-down" data-toggle="modal"
+                           data-target="#loginModal"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div ng-if="isPresent">
+                  <div ng-if="!isEnable">
+                    <div class="net-votes">
+                      <button class="btn pt-0 pb-0">
+                        <div>
+                          <i class="fa fa-2x fa-arrow-up" data-toggle="modal"
+                             data-target="#confirmMailModal"></i>
+                        </div>
+                      </button>
+                      <div>
+                        <h4>{{post.votesUp - post.votesDown}}</h4>
+                      </div>
+                    </div>
+                    <div class="net-votes">
+                      <button class="btn pt-0 pb-0">
+                        <div>
+                          <i class="fa fa-2x fa-arrow-down" data-toggle="modal"
+                             data-target="#confirmMailModal"></i>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  <div ng-if="isEnable" ng-cloak>
+                    <div class="net-votes">
+                      <button class="btn pt-0 pb-0" ng-click="upVote(post.location)" type="submit">
+                        <div ng-if="post.loggedVote > 0" ng-cloak>
+                          <i class="fa fa-2x fa-arrow-up votedUp"></i>
+                        </div>
+                        <div ng-if="post.loggedVote <= 0" ng-cloak>
+                          <i class="fa fa-2x fa-arrow-up"></i>
+                        </div>
+                      </button>
+                      <div>
+                        <h4>{{post.votesUp - post.votesDown}}</h4>
+                      </div>
+                    </div>
+                    <div class="net-votes">
+                      <button class="btn pt-0 pb-0" type="submit" ng-click="downVote(post.location)">
+                        <div ng-if="post.loggedVote < 0" ng-cloak>
+                          <i class="fa fa-2x fa-arrow-down votedDown"></i>
+                        </div>
+                        <div ng-if="post.loggedVote >= 0" ng-cloak>
+                          <i class="fa fa-2x fa-arrow-down"></i>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="row post-title">
+                  <a href="#/posts/{{post.id}}" style="word-break: break-all">
+                    {{post.postTitle}}
+                  </a>
+                </div>
+                <div class="row posts-description" style="word-break: break-all">
+                  {{post.postDescription}}
+                </div>
+                <div class="row extra-info">
+                  <div class="col-9 tags">
+                    <div ng-repeat="tag in post.postTags">
+                      <a ng-href="#/explore">
+                        <button class="badge badge-color ml-1" ng-click="redirectToExplore(tag.tagName, tag.type)">
+                          <span>
+                                  <div ng-if="tag.type == 'tech_name'">
+                                      {{tag.tagName}}
+                                  </div>
+                                  <div ng-if="tag.type == 'tech_type'">
+                                      {{'TYPE_' + tag.tagName | uppercase | translate}}
+                                  </div>
+                                  <div ng-if="tag.type == 'tech_category'">
+                                      {{ "CATEGORY_" + tag.tagName | uppercase | translate}}
+                                  </div>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="row d-flex secondary-color text-right post-date">
+                      {{post.timestamp.toLocaleString() | date:'dd/MM/yyyy HH:mm'}}
+                    </div>
+                    <div class="row d-flex secondary-color text-right">
+                      <a href="#/{{post.postOwner.location}}">{{post.postOwner.username}}</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row d-flex my-1 justify-content-end">
+                  <div class="col-3">
+                    <div ng-if="isAdmin || post.postOwner.username == username">
+                      <div class="row d-flex">
+                        <div>
+                          <button class="btn btn-danger btn-block text-nowrap" type="button" data-toggle="modal" ng-click="setDel(post.location)" data-target="#deletePostModal">
+                            <i class="fas fa-trash-alt fa-sm mr-1"></i>
+                            {{'POST_DELETE' | translate}}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="posts.posts.length == 0">
+      {{'FORUM_EMPTY_POSTS' | translate}}
+    </div>
+  </div>
+</div>
+<!-- Pagination -->
+<pagination ng-if="pagingLinks != undefined" class="d-flex justify-content-center mt-2" paging="{{pagingLinks}}"></pagination>
+<modal-delete-post del="deletePost" clean="cleanDel"></modal-delete-post>
+<modal-login></modal-login>
+<mail-modal></mail-modal>

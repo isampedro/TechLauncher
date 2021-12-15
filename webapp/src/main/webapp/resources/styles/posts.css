@@ -1,0 +1,119 @@
+.secondary-color{
+    color:grey;
+}
+
+.badge-color {
+    border: none;
+    color: white;
+    background-color: #b693f5;
+}
+
+.post-title {
+    font-size: 1.5em;
+}
+
+.icon-large{
+    background-size: 1em;
+}
+
+.fa-angle-up{
+    -webkit-text-stroke: 3px grey;
+    color: grey;
+}
+
+.fa-angle-down{
+    -webkit-text-stroke: 3px grey;
+    color: grey;
+}
+
+.fa-angle-up:hover{
+    -webkit-text-stroke: 3px black;
+    color: black;
+}
+
+.fa-angle-down:hover{
+    -webkit-text-stroke: 3px black;
+    color: black;
+}
+
+.post-cards {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card {
+    width: 90%;
+    height: 14em;
+}
+
+
+.net-votes{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.posts-description {
+    display: block;
+    display: -webkit-box;
+    height: 3em;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.extra-info {
+    margin-bottom: 0em;
+    margin-top: 1em;
+}
+
+.votedUp {
+    color: #D7263D;
+}
+
+.votedDown {
+    color: #067BC2;
+}
+
+.showing-results {
+    width: 90%;
+    margin-bottom: 0.5em;
+}
+
+.showing-results.data {
+    float: right;
+}
+
+.post-card-individual {
+    width: 90%;
+}
+
+.post-card-answer {
+    width: 100%;
+}
+
+.answers {
+    align-items: center;
+    width: 90%;
+}
+
+.user-comment {
+    align-items: center;
+    width: 90%;
+}
+
+.post-data{
+    width: 100%;
+}
+
+.description-text {
+    word-break: break-word;
+    display: inline-block;
+}
+
+.hidden-no-space {
+    display: none;
+}

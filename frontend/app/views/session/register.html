@@ -1,0 +1,112 @@
+<div ng-controller="RegisterCtrl">
+
+  <div class="content-no-sidebar">
+    <div class="page-title">
+      {{'REGISTER_TITLE' | translate}}
+    </div>
+
+    <div class="page-description"></div>
+    <div class="formError" ng-if="error">
+      <div ng-repeat="errorDetail in errorDetails">
+        {{errorDetail.message}}
+      </div>
+    </div>
+
+    <form ng-if="!registered" name="registerForm">
+      <div class="form-group">
+
+        <label for="username"> {{'LOGIN_USERNAME' | translate}}</label>
+        <input class="form-control" type="text" id="username" ng-model="usernameInput" name="usernameInput"
+               required
+               ng-minlength="{{usernameValidator.minLen}}"
+               ng-maxlength="{{usernameValidator.maxLen}}"
+               ng-pattern="usernameValidator.pattern"
+               placeholder="{{'LOGIN_USERNAME_PLACEHOLDER' | translate}}"/>
+        <div class="formError"
+             ng-show="registerForm.usernameInput.$dirty && registerForm.usernameInput.$error.required">{{
+          'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError"
+             ng-show="registerForm.usernameInput.$error.minlength || registerForm.usernameInput.$error.maxlength">{{
+          'FORM_ERROR_LENGTH' | translate : '{min: 3, max: 100}'}}
+        </div>
+        <div class="formError" ng-show="registerForm.usernameInput.$error.pattern">{{ 'FORM_ERROR_USERNAME_PATTERN' |
+          translate}}
+        </div>
+      </div>
+      <div class="form-group">
+
+        <label for="password"> {{'LOGIN_PASSWORD' | translate}}</label>
+        <input class="form-control" type="password" ng-model="passwordInput" id="password" name="passwordInput"
+               required
+               ng-minlength="{{passwordValidator.minLen}}"
+               ng-maxlength="{{passwordValidator.maxLen}}"
+               placeholder="{{'LOGIN_PASSWORD_PLACEHOLDER' | translate}}"/>
+        <div class="formError"
+             ng-show="registerForm.passwordInput.$dirty && registerForm.passwordInput.$error.required ">{{
+          'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError"
+             ng-show="registerForm.passwordInput.$error.minlength || loginForm.passwordInput.$error.maxlength">{{
+          'FORM_ERROR_LENGTH' | translate : '{min: 6, max: 100}'}}
+        </div>
+
+      </div>
+      <div class="form-group">
+
+        <label for="repeatPassword"> {{'LOGIN_PASSWORD_REPEAT' | translate}}</label>
+        <input class="form-control" type="password" id="repeatPassword" ng-model="repeatPasswordInput"
+               name="repeatPasswordInput"
+               value-matches="passwordInput"
+               required
+               ng-minlength="{{passwordValidator.minLen}}"
+               ng-maxlength="{{passwordValidator.maxLen}}"
+               placeholder="{{'LOGIN_PASSWORD_PLACEHOLDER' | translate}}"/>
+        <div class="formError"
+             ng-show="registerForm.repeatPasswordInput.$dirty && registerForm.repeatPasswordInput.$error.required ">{{
+          'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError"
+             ng-show="registerForm.repeatPasswordInput.$error.minlength|| registerForm.repeatPasswordInput.$error.maxlength">
+          {{ 'FORM_ERROR_LENGTH' | translate : '{min: 6, max: 100}'}}
+        </div>
+        <div class="formError"
+             ng-show="registerForm.repeatPasswordInput.$dirty && registerForm.repeatPasswordInput.$invalid">{{
+          'FORM_ERROR_PASSWORDS_MATCHING' | translate}}
+        </div>
+      </div>
+      <div class="form-group">
+
+        <label for="email">{{'LOGIN_EMAIL' | translate}}</label>
+        <input class="form-control" id="email" ng-model="emailInput" name="emailInput"
+               required
+               type="email"
+               placeholder="{{'LOGIN_EMAIL_PLACEHOLDER' | translate}}"/>
+        <div class="formError" ng-show="registerForm.emailInput.$dirty && registerForm.emailInput.$error.required ">{{
+          'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError" ng-show="registerForm.emailInput.$error.email ">{{ 'FORM_ERROR_EMAIL_FORMAT' |
+          translate}}
+        </div>
+      </div>
+
+
+      <div class="d-flex justify-content-center">
+        <button ng-if="registerForm.$valid" class="btn primary-button" type="submit"
+                ng-click="register(emailInput, usernameInput, passwordInput)">{{'REGISTER_TITLE' | translate}}
+        </button>
+        <button ng-if="registerForm.$invalid" disabled class="btn primary-button" type="submit">{{'REGISTER_TITLE' |
+          translate}}
+        </button>
+      </div>
+    </form>
+
+
+    <div ng-if="registered">
+
+      <div>{{'REGISTER_SUCCESS' | translate}}</div>
+      <div><a ng-href="#/login">{{'LOGIN_GO_LOGIN' | translate}}</a></div>
+    </div>
+  </div>
+</div>
+

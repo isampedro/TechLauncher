@@ -1,0 +1,32 @@
+<div class="modal fade" id="reportCommentModal" tabindex="-1" role="dialog" aria-labelledby="reportContentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title" id="reportCommentLabel">{{'TECH_REPORT_COMMENT' | translate}}</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+        <span aria-hidden="true">&times;</span>
+      </div>
+      <div class="modal-body">
+
+        <form name="commentReportForm">
+
+          <div class="form-group">
+            <label for="commentDescription">{{'TECH_REPORT_DESCRIPTION' | translate}}</label>
+            <input class="form-control" type="text" id="commentDescription" ng-model="descriptionInput" name="descriptionInput" required ng-minlength="3" ng-maxlength="500" placeholder="{{'ADD_CONTENT_TITLE_PLACEHOLDER' | translate}}"/>
+            <div ng-show="commentReportForm.descriptionInput.$dirty && commentReportForm.descriptionInput.$error.required">{{ 'FORM_ERROR_EMPTY' | translate}}</div>
+            <div ng-show="commentReportForm.descriptionInput.$error.minlength || commentReportForm.descriptionInput.$error.maxlength">{{ 'FORM_ERROR_LENGTH' | translate : '{min: 3, max: 500}'}}</div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button ng-if="commentReportForm.$valid" class="btn primary-button" type="submit"  ng-click="report(descriptionInput)">{{'BUTTON_SUBMIT' | translate}}</button>
+            <button ng-if="commentReportForm.$invalid"  disabled class="btn primary-button" type="submit" >{{'BUTTON_SUBMIT' | translate}}</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

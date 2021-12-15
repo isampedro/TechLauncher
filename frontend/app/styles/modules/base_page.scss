@@ -1,0 +1,195 @@
+// bower:scss
+@import 'bootstrap-sass-official/assets/stylesheets/bootstrap.scss';
+// endbower
+
+nav {
+  background: #733bce;
+}
+
+.navbar{
+  z-index:4;
+  box-shadow: 0 1em 0.5em -0.5em rgba(0,0,0,.2);
+}
+
+#profile-settings{
+  margin-right: 3em;
+}
+
+nav a {
+  color: aliceblue;
+}
+
+nav a:hover {
+  color: #f1f1f1;
+}
+
+.error-background {
+  background: #AFBBF2
+}
+
+select.form-control:not([size]):not([multiple]) {
+  height: auto!important;
+}
+
+.sidenav {
+  position: relative;
+  width: 13.5em;
+  min-height: 100vmin;
+  left: 0;
+  background-color: #733bce;
+  overflow-x: hidden;
+  padding-top: 20px;
+  z-index:0;
+  padding-bottom: 10em;
+}
+
+.sidenav a {
+  padding: 0.5em 0.5em 0.5em 1em;
+  text-decoration: none;
+  font-size: 1em;
+  color: aliceblue;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.content {
+  margin-left: 1em;
+  margin-right: 1em;
+  padding-left: 10px;
+  padding-top: 10px;
+  width: calc(100% - 14em);
+}
+
+.content-no-sidebar {
+   justify-content: center;
+   text-align: center;
+   vertical-align: center;
+   padding-top: 4em;
+   margin: auto;
+   padding-left: 4em;
+   padding-right: 4em;
+   width: 80%;
+ }
+
+.error-body {
+  justify-content: center;
+  text-align: center;
+}
+
+.content-no-sidebar-left {
+  justify-content: center;
+  margin: auto;
+  padding-left: 4em;
+  padding-right: 4em;
+  width: 90%;
+}
+
+.page-title {
+  font-size: 5em;
+  border-bottom: 0.01em solid black;
+}
+
+.page-description {
+  text-align: center;
+  font-size: 1em;
+  padding-top: 0.5em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+.title {
+  padding-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 0.5em;
+  border-bottom: 0.1em solid black;
+}
+
+.subtitle {
+  padding-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 0.5em;
+}
+
+
+.container {
+  flex-wrap: wrap;
+}
+
+
+
+.margin-left{
+  margin-left: 3em;
+}
+
+.double-margin-left{
+  margin-left: 6em;
+}
+
+.primary-button{
+  background-color: #48bfe3;
+  color: white;
+}
+
+.fab-button{
+  background-color: #48bfe3;
+  color: white;
+  border-radius: 50%;
+  display: block;
+  height: 0.5em;
+  width:  0.5em;
+  border: 1px solid #fefefe;
+  font-size:22px;
+}
+
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.mini-logo
+{
+  width: 5em;
+  height: 5em;
+}
+
+.medium-logo{
+  width: 5em;
+  height: 5em;
+}
+
+.max-logo{
+  width: 8em;
+  height: 8em;
+}
+
+.primary-button{
+  color: white;
+  background-color: #48bfe3;
+}
+
+.formError {
+  color: red;
+}
+
+.fieldset {
+  font-size: 1em;
+  padding: 0.5em;
+  border-radius: 1em;
+  font-family: sans-serif;
+}
+
+.search-item {
+  font-size: inherit;
+  padding: 0.2em;
+  /* the following ensures they're all using the same box-model for rendering */
+  -moz-box-sizing: content-box; /* or `border-box` */
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}

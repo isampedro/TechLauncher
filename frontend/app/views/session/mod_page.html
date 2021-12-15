@@ -1,0 +1,207 @@
+<div class="content-no-sidebar">
+  <div class="page-title-big row">{{'MOD_WREF' | translate}}</div>
+
+  <!-- Mods managing -->
+  <div>
+    <ul class="nav nav-tabs" id="mod-tab">
+      <li class="nav-item">
+        <a class="nav-link" href="#promote" data-toggle="tab" role="tab" aria-controls="promote" aria-selected="true">{{'BUTTON_PROMOTE' | translate}}</a>
+      </li>
+      <li ng-if="isAdmin || isOwner">
+        <a class="nav-link" href="#demote" data-toggle="tab" role="tab" aria-controls="demote" aria-selected="false">{{'BUTTON_DEMOTE' | translate}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#reports" data-toggle="tab" role="tab" aria-controls="reports"
+           aria-selected="false">{{'MOD_SEE_REPORTS' | translate}}</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <!-- PROMOTE -->
+      <div class="tab-pane active" id="promote">
+        <div class="add-margin"><h5>{{'MOD_PROMOTE_DESCRIPTION' | translate}}</h5></div>
+        <div class="row">
+          <div class="col-6">
+            <!-- pending to verify by comments -->
+            <div class="page-title">{{'MOD_PENDING' | translate}}:</div>
+            <div class="page-description"></div>
+            <div class="d-flex flex-column justify-content-center">
+              <div ng-repeat="applicant in verified">
+                <div class="card emphasis emph-comment row mb-2 mx-4 verified">
+                  <div class="card-body row mt-1">
+                    <div class="col-3 secondary-font"><a
+                      ng-href="#/users/{{applicant.userId}}">{{applicant.username}}</a>
+                      /
+                      <a ng-href="#/techs/{{applicant.techId}}">{{applicant.frameworkName}}</a>
+                    </div>
+                    <div class="col-6 text-left"> {{applicant.description}}</div>
+                    <div class="col third-font text-right"> {{applicant.timestamp | date:'dd/MM/yyyy HH:mm'}}</div>
+                  </div>
+                  <div class="card-footer row mx-2" style="flex: auto">
+                    <button type="submit" class="btn primary-button" ng-click="acceptMod(applicant)">
+                      {{'BUTTON_PROMOTE' | translate}}
+                    </button>
+                    <button type="submit" class="btn btn-secondary" ng-click="rejectMod(applicant)">
+                      {{'BUTTON_IGNORE' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="arrayIsEmpty(verified)">{{'MOD_EMPTY_PENDING' | translate}}</div>
+            </div>
+            <div ng-if="verifiedPaging != undefined">
+              <pagination paging="{{verifiedPaging}}" id="{{'verified'}}"></pagination>
+            </div>
+          </div>
+          <div class="col">
+            <!-- pending applicants to verify -->
+            <div class="page-title">{{'MOD_PENDING_APPLICANTS' | translate}}</div>
+            <div class="page-description"></div>
+            <div class="d-flex flex-wrap justify-content-center">
+              <div ng-repeat="applicant in applicants">
+                <div class="card emphasis emph-comment mb-2 applicant mx-2">
+                  <div class="card-body mt-1">
+                    <div class="secondary-font"><a ng-href="#/users/{{applicant.userId}}">{{applicant.username}}</a>
+                      /
+                      <a ng-href="#/techs/{{applicant.techId}}">{{applicant.frameworkName}}</a>
+                    </div>
+                  </div>
+                  <div class="card-footer row mx-2" style="flex: auto">
+                    <button type="submit" class="btn primary-button" ng-click="acceptMod(applicant)">
+                      {{'BUTTON_PROMOTE' | translate}}
+                    </button>
+                    <button type="submit" class="btn btn-secondary" ng-click="rejectMod(applicant)">
+                      {{'BUTTON_IGNORE' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="arrayIsEmpty(applicants)">{{'MOD_EMPTY_APPLICANTS' | translate}}</div>
+            </div>
+            <div ng-if="applicantsPaging != undefined">
+              <pagination paging="{{applicantsPaging}}" id="{{'applicants'}}"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- DEMOTE -->
+      <div class="tab-pane" id="demote">
+        <div class="add-margin"><h5>{{'MOD_DEMOTE_DESCRIPTION' | translate}}</h5></div>
+        <div class="page-title">{{'MOD_TITLE' | translate}}</div>
+        <div>
+          <div ng-if="isAdmin || isOwner">
+            <div class="page-description"></div>
+            <div class="d-flex flex-wrap justify-content-center">
+              <div ng-repeat="moderator in mods">
+                <div ng-if="!moderator.isAdmin" class="card emphasis emph-comment mb-2 applicant mx-2">
+                  <div class="card-body mt-1">
+                    <div class="secondary-font">
+                      <a ng-href="#/users/{{moderator.userId}}">{{moderator.username}}</a>
+                      /
+                      <a ng-href="#/techs/{{moderator.techId}}">{{moderator.frameworkName}}</a>
+                    </div>
+                  </div>
+                  <div class="card-footer row mx-2 justify-content-center">
+                    <button type="submit" class="btn btn-danger" ng-click="deleteMod(moderator)">
+                      {{'BUTTON_DEMOTE' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="arrayIsEmpty(mods)">{{'MOD_NO_MODS' | translate}}</div>
+            </div>
+            <div ng-if="modsPaging != undefined">
+              <pagination paging="{{modsPaging}}" id="{{'mods'}}"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SEE REPORTS -->
+      <div class="tab-pane" id="reports">
+        <div class="add-margin"><h5>{{'MOD_SEE_REPORTS_DESCRIPTION' | translate}}</h5></div>
+        <!-- Reported Comments -->
+        <div class="row">
+          <div ng-if="isAdmin || isOwner" class="col-6">
+            <div class="page-title">{{'MOD_COMMENT_TITLE' | translate}}</div>
+            <div class="page-description"></div>
+            <div class="row justify-content-center">
+              <div class="d-flex flex-column">
+                <div ng-repeat="comment in reportedComments">
+                  <div class="card emphasis emph-comment mb-2 verified">
+                    <div class="card-body my-auto">
+                      <div class="border-bottom">
+                        <p class="my-1">{{'MOD_REPORT_COMMENT_OWNER' | translate}}:&nbsp;<a
+                          ng-href="#/users/{{comment.userId}}">{{comment.reported}}</a></p>
+                        <p class="my-1">{{'MOD_REPORT_TECH' | translate}}:&nbsp;<a
+                          ng-href="#/techs/{{comment.techId}}">{{comment.frameworkName}}</a></p>
+                        <p class="my-1">
+                          {{'MOD_COMMENT_DESCRIPTION' | translate}}:&nbsp;{{comment.commentDescription}}</p>
+                      </div>
+                      <div class="mt-2">
+                        <p class="my-1">
+                          {{'MOD_REPORT_DESCRIPTION' | translate}}:&nbsp;{{comment.reportDescription}}</p>
+                      </div>
+                    </div>
+                    <div class="card-footer row mx-2 justify-content-center">
+                      <button type="submit" class="btn btn-danger" ng-click="acceptCommentReport(comment)">
+                        {{'BUTTON_ACCEPT' | translate}}
+                      </button>
+                      <button type="submit" class="btn btn-secondary" ng-click="deleteCommentReport(comment)">
+                        {{'BUTTON_CANCEL' | translate}}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="arrayIsEmpty(reportedComments)">{{'MOD_COMMENT_EMPTY' | translate}}</div>
+            </div>
+            <div ng-if="repComsPaging != undefined">
+              <pagination paging="{{repComsPaging}}" id="{{'repComs'}}"></pagination>
+            </div>
+          </div>
+          <!-- reported content -->
+          <div class="col">
+            <div class="page-title">{{'MOD_CONTENT_TITLE' | translate}}</div>
+            <div class="page-description"></div>
+            <div class="row justify-content-center">
+              <div class="d-flex flex-column">
+                <div ng-repeat="content in reportedContents">
+                  <div class="card d-flex flex-wrap emphasis emph-comment mb-2 verified">
+                    <div class="card-body my-auto">
+                      <div class="border-bottom">
+                        <p class="my-1">{{'MOD_REPORT_CONTENT_OWNER' | translate}}:&nbsp;<a
+                          ng-href="#/users/{{content.userId}}">{{content.reported}}</a></p>
+                        <p class="my-1">{{'MOD_REPORT_TECH' | translate}}:&nbsp;<a
+                          ng-href="#/techs/{{content.techId}}">{{content.frameworkName}}</a></p>
+                        <p class="my-1">{{'MOD_CONTENT_DESCRIPTION' | translate}}:&nbsp;<a
+                          href="{{content.contentLink}}" target="_blank">{{content.contentLink}}</a></p>
+                      </div>
+                      <div class="mt-2">
+                        <p class="my-1">
+                          {{'MOD_REPORT_DESCRIPTION' | translate}}:&nbsp;{{content.reportDescription}}</p>
+                      </div>
+                    </div>
+                    <div class="card-footer row mx-2 justify-content-center">
+                      <button type="submit" class="btn btn-danger" ng-click="acceptContentReport(content)">
+                        {{'BUTTON_ACCEPT' | translate}}
+                      </button>
+                      <button type="submit" class="btn btn-secondary" ng-click="deleteContentReport(content)">
+                        {{'BUTTON_CANCEL' | translate}}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="arrayIsEmpty(reportedContents)">{{'MOD_CONTENT_EMPTY' | translate}}</div>
+            </div>
+            <!-- Pagination -->
+            <div ng-if="repConsPaging != undefined">
+              <pagination paging="{{repConsPaging}}" id="{{'repCons'}}"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

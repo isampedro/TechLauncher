@@ -1,0 +1,119 @@
+<div class="d-flex">
+  <div class="sidenav overflow-auto">
+    <div ng-repeat="category in categories">
+      <a href={{"#/techs/category/"+category.category}}>{{ "CATEGORY_" + category.category | uppercase | translate}}</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="page-title">
+      {{'ADD_TECH' | translate }}
+    </div>
+
+    <div class="mt-2 text-danger" ng-if="error">
+      <div ng-repeat="errorDetail in errorDetails">
+        {{errorDetail.message}}
+      </div>
+    </div>
+
+    <div class="page-description"></div>
+
+    <form name="frameworkForm" ng-submit="addTech()" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="techName">{{'ADD_TECH_NAME' | translate}}</label>
+        <input class="form-control" type="text" id="techName" ng-model="add.name" name="name" placeholder="{{'ADD_TECH_NAME_PLACEHOLDER' | translate}}"
+               required
+               ng-minlength="{{techNameValidator.minLen}}"
+               ng-maxlength="{{techNameValidator.maxLen}}"
+               ng-pattern="techNameValidator.pattern"
+               />
+        <div class="formError" ng-show="frameworkForm.techNameInput.$dirty && frameworkForm.techNameInput.$error.required">
+          {{ 'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError" ng-show="frameworkForm.techNameInput.$error.minlength || frameworkForm.techNameInput.$error.maxlength">
+          {{ 'FORM_ERROR_LENGTH' | translate: '{min: 1, max: 50}'}}
+        </div>
+        <div class="formError" ng-show="frameworkForm.techNameInput.$error.pattern">{{ 'FORM_ERROR_TECH_NAME_PATTERN' | translate}}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="techCategory">{{'ADD_TECH_CATEGORY' | translate}}</label>
+        <select id="techCategory" class="form-control" ng-model="add.category" name="category" onfocus='this.size=5;'
+                onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+          <option ng-repeat="category in categories track by $index" ng-selected="$index == 0" value="{{category.category}}">
+            {{ "CATEGORY_" + category.category | uppercase | translate}}
+          </option>
+        </select>
+        <div class="formError" ng-show="frameworkForm.techCategoryInput.$dirty && frameworkForm.techNameInput.$error.required">
+          {{ 'FORM_ERROR_EMPTY' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="techType">{{'ADD_TECH_TYPE' | translate}}</label>
+        <select id="techType" class="form-control" ng-model="add.type" name="type" onfocus='this.size=5;'
+                onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+          <option ng-repeat="type in types track by $index" ng-selected="$index == 0" value="{{type.type}}">{{ "TYPE_" + type.type | uppercase | translate}}
+          </option>
+        </select>
+        <div class="formError" ng-show="frameworkForm.techTypeInput.$dirty && frameworkForm.techTypeInput.$error.required">
+          {{ 'FORM_ERROR_EMPTY' | translate}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="techDescription">{{'ADD_TECH_DESCRIPTION' | translate}}</label>
+        <textarea class="form-control" id="techDescription" ng-model="add.description" name="description" required
+                  ng-minlength="{{techDescriptionValidator.minLen}}"
+                  ng-maxlength="{{techDescriptionValidator.maxLen}}"
+                  placeholder="{{'ADD_TECH_DESCRIPTION_PLACEHOLDER' | translate}}"></textarea>
+        <div class="formError"
+          ng-show="frameworkForm.techDescriptionInput.$dirty && frameworkForm.techDescriptionInput.$error.required">
+          {{ 'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError"
+          ng-show="frameworkForm.techDescriptionInput.$error.minlength || frameworkForm.techDescriptionInput.$error.maxlength">
+          {{ 'FORM_ERROR_LENGTH' | translate: '{min: 1, max: 500}'}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="techIntroduction">{{'ADD_TECH_INTRODUCTION' | translate}}</label>
+        <textarea class="form-control" id="techIntroduction" ng-model="add.introduction" name="introduction" required
+                  ng-minlength="{{techIntroValidator.minLen}}"
+                  ng-maxlength="{{techIntroValidator.maxLen}}"
+                  placeholder="{{'ADD_TECH_INTRODUCTION_PLACEHOLDER' | translate}}"></textarea>
+        <div class="formError"
+          ng-show="frameworkForm.techIntroductionInput.$dirty && frameworkForm.techIntroductionInput.$error.required">
+          {{ 'FORM_ERROR_EMPTY' | translate}}
+        </div>
+        <div class="formError"
+          ng-show="frameworkForm.techIntroductionInput.$error.minlength || frameworkForm.techIntroductionInput.$error.maxlength">
+          {{ 'FORM_ERROR_LENGTH' | translate: '{min: 1, max: 5000}'}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="techPicture">{{'ADD_TECH_PICTURE' | translate}}</label>
+        <div class="text-center">
+          <input ng-model="add.picture" name="picture" id="techPicture" class="form-control"
+                 type="file"
+                 ngf-select="setPic($file)"
+                 accept="image/*"/>
+        </div>
+      </div>
+
+      <button ng-if="frameworkForm.$valid" class="btn primary-button" type="submit">{{'BUTTON_SUBMIT' | translate}}
+      </button>
+      <button ng-if="frameworkForm.$invalid" disabled class="btn primary-button">
+        {{'BUTTON_SUBMIT' | translate}}
+      </button>
+      <div class="btn primary-button disabled" id="addTechLoading" hidden>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        {{'BUTTON_LOADING' | translate}}
+      </div>
+
+    </form>
+  </div>
+</div>

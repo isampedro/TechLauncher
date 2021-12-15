@@ -1,0 +1,80 @@
+<div class="d-flex">
+  <div class="sidenav overflow-auto">
+    <div ng-repeat="category in categories">
+      <a href={{"#/techs/category/"+category.category}}>{{ "CATEGORY_" + category.category | uppercase | translate}}</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="page-title">
+      <h2>{{'HOME_TECHS_TITLE' | translate}}</h2>
+    </div>
+    <div>
+      <div ng-if="isMod||isAdmin">
+        <div class="d-flex row justify-content-center align-middle">
+          <h4 class="mx-2 my-auto">{{'TECHS_ADD_NEW' | translate}}</h4>
+
+          <a href="#/techs/add_tech">
+            <button class="btn btn-info" type="button">
+              <i class="fa fa-plus fa-sm mr-1"></i>
+              {{'BUTTON_ADD_TECH' | translate}}
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <h4 class="title">{{'TECHS_BEST_RATED' | translate}}</h4>
+
+      <div class="row equal">
+        <div ng-repeat="hot in home.hots">
+          <div class="card mx-4 mb-4">
+            <a href="#/techs/{{hot.id}}">
+              <div class="card-body">
+                <div ng-if="hot.hasPicture">
+                  <div class="max-logo d-flex align-items-center justify-content-center">
+                    <img ng-src="{{hot.picture}}" alt="{{'TECH_PICTURE' | translate }}"/>
+                  </div>
+                </div>
+                <div ng-if="!hot.hasPicture">
+                  <div class="max-logo d-flex align-items-center justify-content-center">
+                    <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE' | translate }}"/>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer text-dark">{{hot.name}}</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="isPresent">
+        <div ng-if="home.interests.length!=0">
+          <h4 class="title">{{'TECHS_TASTES' | translate}}</h4>
+          <div class="row equal">
+            <div ng-repeat="tech in home.interests">
+              <div class="card mx-4 mb-4">
+                <a href=#/techs/{{tech.id}}>
+                  <div class="card-body">
+                    <div ng-if="tech.hasPicture">
+                      <div class="max-logo d-flex align-items-center justify-content-center">
+                        <img ng-src="{{tech.picture}}" alt="{{'TECH_PICTURE' | translate }}"/>
+                      </div>
+                    </div>
+                    <div ng-if="!tech.hasPicture">
+                      <div class="max-logo d-flex align-items-center justify-content-center">
+                        <img src="resources/assets/tech_picture_default.png" alt="{{'TECH_PICTURE' | translate }}"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-dark">{{tech.name}}</div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

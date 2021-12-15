@@ -1,0 +1,27 @@
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">{{'USER_NOT_LOGGED' | translate}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row d-flex justify-content-center align-items-center">
+          <img src="resources/assets/logo.png" width="60" height="60" class="d-inline-block align-top" alt="Tech Launcher Logo">
+        </div>
+        <div class="row justify-content-center align-items-center margin-top">
+          <a ng-href="#/login">
+          <button type="button" class="btn btn-info">{{'LOGIN_TITLE' | translate}}</button>
+          </a>
+        </div>
+        <div class="row  justify-content-center align-items-center margin-top">
+          <div>{{'LOGIN_SIGN_UP_QUESTION' | translate}} <a ng-href="#/register">{{'LOGIN_SIGN_UP' | translate}}</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

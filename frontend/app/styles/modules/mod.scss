@@ -1,0 +1,38 @@
+.page-title {
+  font-size: 1.7em;
+}
+
+.page-title-big {
+  font-size: 3em;
+  justify-content: center;
+}
+
+.add-margin {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.card .btn {
+  border-radius: 10%;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.verified .btn {
+  float: right;
+}
+
+.btn-danger {
+  justify-content: center;
+}
+
+.content-no-sidebar{
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  justify-content: center;
+  text-align: center;
+  vertical-align: center;
+  padding-top: 2.5em;
+  padding-bottom: 2em;
+  width: 100%;
+}

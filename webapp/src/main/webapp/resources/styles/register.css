@@ -1,0 +1,22 @@
+.page-title {
+    font-size: 3em;
+}
+
+.content {
+    text-align: center;
+    justify-content: center;
+    width: 70%;
+}
+
+label {
+    float: left;
+}
+
+.content .formError {
+    color: red;
+}
+
+.btn {
+    border-radius: 10%;
+    float: right;
+}
