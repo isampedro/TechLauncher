@@ -9,13 +9,4 @@ Tech Launcher is a web application where you will be able to gather information 
 In order to get the .war use the command mvn clean package
 ```
 
-## Roles & Credentials
-
-
-Role | Username | Password
------|  -------- | --------
-NORMAL|martin|pawuser2020b1|
-MODERATOR|btw22xyp|pawmod2020b1|
-ADMIN|frodo|pawadmin2020b1|
-
 Please also try to register with a real email in order to get the confirmation email.
